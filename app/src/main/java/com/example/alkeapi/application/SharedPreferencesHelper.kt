@@ -30,9 +30,13 @@ object SharedPreferencesHelper {
         editor.apply()
     }
 
-    fun idUserLogged(context: Context, idUser: Int){
+    fun idUserLogged(context: Context, idUser: Int) {
         val editor = getSharedPreferences(context).edit()
         editor.putString(ID_USER_KEY, idUser.toString())
         editor.apply()
+    }
+
+    fun getIdUser(context: Context): Int? {
+        return getSharedPreferences(context).getString(ID_USER_KEY, null)?.toInt()
     }
 }

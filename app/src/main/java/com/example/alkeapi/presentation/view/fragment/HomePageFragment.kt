@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alkeapi.R
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
 import com.example.alkeapi.data.repository.AlkeRepositoryImplement
 import com.example.alkeapi.databinding.FragmentHomePageBinding
 import com.example.alkeapi.domain.AlkeUseCase
+import com.example.alkeapi.presentation.adapter.TransactionAdapter
 import com.example.alkeapi.presentation.viewmodel.HomePageViewModel
 import com.example.alkeapi.presentation.viewmodel.HomePageViewModelFactory
 import com.example.alkeapi.presentation.viewmodel.LoginViewModelFactory
@@ -22,7 +24,7 @@ class HomePageFragment : Fragment() {
 
     private lateinit var binding: FragmentHomePageBinding
     private lateinit var homePageViewModel: HomePageViewModel
-
+    private lateinit var transactionAdapter: TransactionAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -58,6 +60,30 @@ class HomePageFragment : Fragment() {
             binding.txtBalance.text = "$ " + account.money
         }
 
+        homePageViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+
+        }
+
+        setupRecyclerView()
+
+        homePageViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+            if (transactions.isEmpty()) {
+                binding.recyclerTransferencias.visibility = View.GONE
+                binding.imgEmptyTransaction.visibility = View.VISIBLE
+                binding.txtEmptyTransaction.visibility = View.VISIBLE
+            } else {
+                binding.recyclerTransferencias.visibility = View.VISIBLE
+                binding.imgEmptyTransaction.visibility = View.GONE
+                binding.txtEmptyTransaction.visibility = View.GONE
+            }
+            transactionAdapter.setTransactions(transactions)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        transactionAdapter = TransactionAdapter(homePageViewModel, viewLifecycleOwner)
+        binding.recyclerTransferencias.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerTransferencias.adapter = transactionAdapter
     }
 
 
