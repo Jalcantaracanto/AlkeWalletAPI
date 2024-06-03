@@ -54,18 +54,17 @@ class LoginPageFragment : Fragment() {
 
 
     }
+        private fun login() {
+            val email = binding.textInputEmail.editText?.text.toString()
+            val password = binding.textInputPassword.editText?.text.toString()
 
-    private fun login() {
-        val email = binding.textInputEmail.editText?.text.toString()
-        val password = binding.textInputPassword.editText?.text.toString()
-
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            loginViewModel.login(email, password)
-            findNavController().navigate(R.id.homePageFragment)
-        } else {
-            binding.textInputEmail.error = "Please enter email"
-            binding.textInputPassword.error = "Please enter password"
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                loginViewModel.login(email, password)
+                findNavController().navigate(R.id.homePageFragment)
+            } else {
+                binding.textInputEmail.error = "Please enter email"
+                binding.textInputPassword.error = "Please enter password"
+            }
         }
-    }
 
 }
