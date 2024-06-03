@@ -38,4 +38,8 @@ class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
     suspend fun getAccountById(id: Int): AccountResponse {
         return alkeRepository.getAccountsById(id)
     }
+
+    suspend fun createTransaction(transaction: TransactionDataResponse): Boolean {
+        return alkeRepository.createTransaction(transaction)
+    }
 }
