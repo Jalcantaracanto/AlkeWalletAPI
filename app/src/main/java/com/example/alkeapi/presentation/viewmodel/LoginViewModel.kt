@@ -21,9 +21,11 @@ class LoginViewModel(private val alkeUseCase: AlkeUseCase, private val context: 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _userProfileSaved = MutableLiveData<Boolean>()
+    val userProfileSaved: LiveData<Boolean> = _userProfileSaved
+
     private val _usersResult = MutableLiveData<MutableList<User>>()
     val usersResult: LiveData<MutableList<User>> = _usersResult
-
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -31,7 +33,7 @@ class LoginViewModel(private val alkeUseCase: AlkeUseCase, private val context: 
                 val token = alkeUseCase.login(email, password)
                 SharedPreferencesHelper.saveToken(context, token)
                 _loginResult.value = token
-                myProfile()
+                fetchAndSaveUserProfile()
                 Log.d("TOKENTEST", "Login successful, token saved: $token")
             } catch (e: Exception) {
                 _error.value = e.message
@@ -40,13 +42,17 @@ class LoginViewModel(private val alkeUseCase: AlkeUseCase, private val context: 
         }
     }
 
-    fun myProfile() {
+    private fun fetchAndSaveUserProfile() {
         viewModelScope.launch {
             try {
                 val user = alkeUseCase.myProfile()
                 SharedPreferencesHelper.idUserLogged(context, user.id)
+                _userProfileSaved.value = true
+                Log.d("USERTEST", "User profile saved: ${user.id}")
             } catch (e: Exception) {
                 _error.value = e.message
+                _userProfileSaved.value = false
+                Log.e("USERTEST", "Error fetching user profile", e)
             }
         }
     }

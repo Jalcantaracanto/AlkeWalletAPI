@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alkeapi.R
+import com.example.alkeapi.application.SharedPreferencesHelper
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
 import com.example.alkeapi.data.repository.AlkeRepositoryImplement
 import com.example.alkeapi.databinding.FragmentHomePageBinding
 import com.example.alkeapi.domain.AlkeUseCase
+import com.example.alkeapi.presentation.adapter.TransactionAdapter
 import com.example.alkeapi.presentation.viewmodel.HomePageViewModel
 import com.example.alkeapi.presentation.viewmodel.HomePageViewModelFactory
 import com.example.alkeapi.presentation.viewmodel.LoginViewModelFactory
@@ -22,7 +25,7 @@ class HomePageFragment : Fragment() {
 
     private lateinit var binding: FragmentHomePageBinding
     private lateinit var homePageViewModel: HomePageViewModel
-
+    private lateinit var transactionAdapter: TransactionAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,7 +46,7 @@ class HomePageFragment : Fragment() {
         val alkeApiService = RetrofitHelper.getRetrofit(context).create(AlkeApiService::class.java)
         val alkeRepository = AlkeRepositoryImplement(alkeApiService, context)
         val alkeUseCase = AlkeUseCase(alkeRepository)
-        val ViewModelFactory = HomePageViewModelFactory(alkeUseCase, context)
+        val ViewModelFactory = HomePageViewModelFactory(alkeUseCase)
 
         homePageViewModel = ViewModelProvider(this, ViewModelFactory)[HomePageViewModel::class.java]
 
@@ -51,6 +54,7 @@ class HomePageFragment : Fragment() {
         homePageViewModel.myAccount()
 
         homePageViewModel.user.observe(viewLifecycleOwner) { user ->
+            Log.d("TESTUSER", "onViewCreated: $user")
             binding.txtName.text = user.first_name
         }
 
@@ -58,6 +62,20 @@ class HomePageFragment : Fragment() {
             binding.txtBalance.text = "$ " + account.money
         }
 
+        setupRecyclerView()
+
+    }
+
+    private fun setupRecyclerView() {
+        transactionAdapter = TransactionAdapter(homePageViewModel, viewLifecycleOwner)
+        binding.recyclerTransferencias.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerTransferencias.adapter = transactionAdapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SharedPreferencesHelper.clearUserData(requireContext())
+        SharedPreferencesHelper.clearToken(requireContext())
     }
 
 

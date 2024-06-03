@@ -22,6 +22,7 @@ class LoginPageFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginPageBinding
     private lateinit var loginViewModel: LoginViewModel
+    private var hasNavigated = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -52,7 +53,12 @@ class LoginPageFragment : Fragment() {
             login()
         }
 
-
+        loginViewModel.userProfileSaved.observe(viewLifecycleOwner) { isSaved ->
+            if (isSaved) {
+                hasNavigated = true
+                findNavController().navigate(R.id.homePageFragment)
+            }
+        }
     }
 
     private fun login() {
@@ -61,7 +67,6 @@ class LoginPageFragment : Fragment() {
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
             loginViewModel.login(email, password)
-            findNavController().navigate(R.id.homePageFragment)
         } else {
             binding.textInputEmail.error = "Please enter email"
             binding.textInputPassword.error = "Please enter password"

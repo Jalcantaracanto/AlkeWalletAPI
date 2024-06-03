@@ -22,8 +22,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        SharedPreferencesHelper.clearToken(this)
+        SharedPreferencesHelper.clearUserData(this)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         SharedPreferencesHelper.clearToken(this)
+        SharedPreferencesHelper.clearUserData(this)
     }
 }
