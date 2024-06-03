@@ -6,11 +6,6 @@
     app:startDestination="@id/loginPageFragment">
 
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.example.alkeapi.presentation.view.fragment.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
-    <fragment
         android:id="@+id/loginPageFragment"
         android:name="com.example.alkeapi.presentation.view.fragment.LoginPageFragment"
         android:label="LoginPageFragment" >
@@ -22,5 +17,14 @@
         android:id="@+id/homePageFragment"
         android:name="com.example.alkeapi.presentation.view.fragment.HomePageFragment"
         android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePageFragment_to_sendMoneyFragment"
+            app:destination="@id/sendMoneyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendMoneyFragment"
+        android:name="com.example.alkeapi.presentation.view.fragment.SendMoneyFragment"
+        android:label="fragment_send_money"
+        tools:layout="@layout/fragment_send_money" />
 </navigation>

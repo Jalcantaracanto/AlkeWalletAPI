@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alkeapi.R
 import com.example.alkeapi.application.SharedPreferencesHelper
@@ -49,9 +50,11 @@ class HomePageFragment : Fragment() {
         val ViewModelFactory = HomePageViewModelFactory(alkeUseCase)
 
         homePageViewModel = ViewModelProvider(this, ViewModelFactory)[HomePageViewModel::class.java]
-
         homePageViewModel.myProfile()
         homePageViewModel.myAccount()
+        val navController = Navigation.findNavController(view)
+
+        binding.btnSendMoney.setOnClickListener { navController.navigate(R.id.sendMoneyFragment) }
 
         homePageViewModel.user.observe(viewLifecycleOwner) { user ->
             Log.d("TESTUSER", "onViewCreated: $user")
@@ -59,7 +62,7 @@ class HomePageFragment : Fragment() {
         }
 
         homePageViewModel.account.observe(viewLifecycleOwner) { account ->
-            binding.txtBalance.text = "$ " + account.money
+            binding.txtBalance.text = "$" + account.money
         }
 
         setupRecyclerView()

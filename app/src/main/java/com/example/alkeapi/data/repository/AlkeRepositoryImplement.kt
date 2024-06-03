@@ -92,4 +92,8 @@ class AlkeRepositoryImplement(
         }
     }
 
+    override suspend fun createTransaction(transaction: TransactionDataResponse): Boolean {
+        TODO("Not yet implemented")
+    }
+
 }

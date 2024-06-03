@@ -30,11 +30,14 @@ class HomePageViewModel(private val alkeUseCase: AlkeUseCase) :
     private val _transactions = MutableLiveData<MutableList<TransactionDataResponse>>()
     val transactions: LiveData<MutableList<TransactionDataResponse>> get() = _transactions
 
-    private val _userAccount = MutableLiveData<AccountResponse>()
-    val userAccount: LiveData<AccountResponse> = _userAccount
+    private val _userTransactionDetails = MutableLiveData<Pair<AccountResponse, UserDataResponse?>>()
+    val userTransactionDetails: LiveData<Pair<AccountResponse, UserDataResponse?>> = _userTransactionDetails
 
-    private val _userTransaction = MutableLiveData<UserDataResponse>()
-    val userTransaction: LiveData<UserDataResponse> = _userTransaction
+//    private val _userAccount = MutableLiveData<AccountResponse>()
+//    val userAccount: LiveData<AccountResponse> = _userAccount
+//
+//    private val _userTransaction = MutableLiveData<UserDataResponse>()
+//    val userTransaction: LiveData<UserDataResponse> = _userTransaction
 
     init {
         myTransactions()
@@ -76,26 +79,38 @@ class HomePageViewModel(private val alkeUseCase: AlkeUseCase) :
         }
     }
 
-    fun getUserById(id: Int) {
+    fun getUserTransactionDetails(transaction: TransactionDataResponse) {
         viewModelScope.launch {
             try {
-                val userTransaction = alkeUseCase.getUserById(id)
-                _userTransaction.value = userTransaction
+                val account = alkeUseCase.getAccountById(transaction.to_account_id)
+                val userTransaction = account?.userId?.let { alkeUseCase.getUserById(it) }
+                _userTransactionDetails.value = Pair(account, userTransaction)
             } catch (e: Exception) {
                 _error.value = e.message
             }
         }
     }
 
-    fun getAccountById(id: Int) {
-        viewModelScope.launch {
-            try {
-                val account = alkeUseCase.getAccountById(id)
-                _userAccount.value = account
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-
-    }
+//    fun getUserById(id: Int) {
+//        viewModelScope.launch {
+//            try {
+//                val userTransaction = alkeUseCase.getUserById(id)
+//                _userTransaction.value = userTransaction
+//            } catch (e: Exception) {
+//                _error.value = e.message
+//            }
+//        }
+//    }
+//
+//    fun getAccountById(id: Int) {
+//        viewModelScope.launch {
+//            try {
+//                val account = alkeUseCase.getAccountById(id)
+//                _userAccount.value = account
+//            } catch (e: Exception) {
+//                throw e
+//            }
+//        }
+//
+//    }
 }

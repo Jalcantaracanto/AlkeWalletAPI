@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.example.alkeapi.R
 import com.example.alkeapi.data.response.TransactionDataResponse
 import com.example.alkeapi.databinding.TransactionItemBinding
 import com.example.alkeapi.presentation.viewmodel.HomePageViewModel
@@ -57,27 +58,60 @@ class TransactionAdapter(
         fun bind(transaction: TransactionDataResponse) {
             bindingItem.txtfecha.text = formatDate(transaction.date)
 
-            homePageViewModel.getAccountById(transaction.to_account_id)
-            homePageViewModel.userAccount.observe(lifecycleOwner, Observer { account ->
+            homePageViewModel.getUserTransactionDetails(transaction)
+            homePageViewModel.userTransactionDetails.observe(lifecycleOwner, Observer { pair ->
+                val account = pair.first
+                val userTransaction = pair.second
+
                 if (account != null && account.id == transaction.to_account_id) {
-                    homePageViewModel.getUserById(account.userId)
-
-                    homePageViewModel.userTransaction.observe(lifecycleOwner, Observer {
-                        if (it != null) {
-                            bindingItem.txtnombrereceptor.text = it.first_name + " " + it.last_name
-                        }
-
-                        if (account.userId == it?.id){
+                    if (userTransaction != null) {
+                        bindingItem.txtnombrereceptor.text = userTransaction.first_name + " " + userTransaction.last_name
+                        if (account.userId == userTransaction.id) {
                             bindingItem.receiverarrow.visibility = View.VISIBLE
-                            bindingItem.txtcantidad.text = "+$" + String.format("%.2f", transaction.amount.toString())
-                        }else{
+                            bindingItem.txtcantidad.text = "+$" + String.format("%.2f", transaction.amount)
+                        } else {
                             bindingItem.receiverarrow.visibility = View.GONE
-                            bindingItem.txtcantidad.text = "-$" + String.format("%.2f", transaction.amount.toString())
+                            bindingItem.txtcantidad.text = "-$" + String.format("%.2f", transaction.amount)
                         }
-                    })
-
+                    }
+                    bindingItem.imageprofile.setImageResource(getRandomImageResource())
                 }
             })
+
+//            homePageViewModel.getAccountById(transaction.to_account_id)
+//            homePageViewModel.userAccount.observe(lifecycleOwner, Observer { account ->
+//                if (account != null && account.id == transaction.to_account_id) {
+//                    homePageViewModel.getUserById(account.userId)
+//
+//                    homePageViewModel.userTransaction.observe(lifecycleOwner, Observer {
+//                        if (it != null) {
+//                            bindingItem.txtnombrereceptor.text = it.first_name + " " + it.last_name
+//                        }
+//
+//                        if (account.userId == it?.id){
+//                            bindingItem.receiverarrow.visibility = View.VISIBLE
+//                            bindingItem.txtcantidad.text = "+$" + String.format("%.2f", transaction.amount.toString())
+//                        }else{
+//                            bindingItem.receiverarrow.visibility = View.GONE
+//                            bindingItem.txtcantidad.text = "-$" + String.format("%.2f", transaction.amount.toString())
+//                        }
+//                    })
+//
+//                }
+//
+//            })
+            bindingItem.imageprofile.setImageResource(getRandomImageResource())
+        }
+
+        private fun getRandomImageResource(): Int {
+            val images = listOf(
+                R.drawable.pp1,
+                R.drawable.pp2,
+                R.drawable.pp3,
+                R.drawable.pp4,
+                R.drawable.pp5
+            )
+            return images.random()
         }
 
         @RequiresApi(Build.VERSION_CODES.O)

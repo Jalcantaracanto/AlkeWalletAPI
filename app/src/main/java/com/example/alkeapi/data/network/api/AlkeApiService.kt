@@ -38,5 +38,8 @@ interface AlkeApiService {
     @GET("accounts/{id}")
     suspend fun getAccountById(@Path("id") id: Int): AccountResponse
 
+    @POST("transactions")
+    suspend fun createTransactions(@Body data: TransactionResponse): TransactionResponse
+
 
 }

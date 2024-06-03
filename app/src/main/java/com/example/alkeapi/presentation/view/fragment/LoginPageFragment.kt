@@ -12,7 +12,6 @@ import com.example.alkeapi.R
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
 import com.example.alkeapi.data.repository.AlkeRepositoryImplement
-import com.example.alkeapi.databinding.FragmentLoginBinding
 import com.example.alkeapi.databinding.FragmentLoginPageBinding
 import com.example.alkeapi.domain.AlkeUseCase
 import com.example.alkeapi.presentation.viewmodel.LoginViewModel
@@ -23,6 +22,7 @@ class LoginPageFragment : Fragment() {
     private lateinit var binding: FragmentLoginPageBinding
     private lateinit var loginViewModel: LoginViewModel
     private var hasNavigated = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

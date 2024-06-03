@@ -21,4 +21,6 @@ interface AlkeRepository {
 
     suspend fun getAllUsers(): MutableList<User>
 
+    suspend fun createTransaction(transaction: TransactionDataResponse): Boolean
+
 }
