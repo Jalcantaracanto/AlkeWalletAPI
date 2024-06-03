@@ -1,16 +1,27 @@
 package com.example.alkeapi.domain
 
+import android.service.autofill.UserData
 import com.example.alkeapi.data.model.User
 import com.example.alkeapi.data.repository.AlkeRepositoryImplement
+import com.example.alkeapi.data.response.AccountResponse
 import com.example.alkeapi.data.response.LoginResponse
+import com.example.alkeapi.data.response.UserDataResponse
 
 class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
 
-    suspend fun login(email: String, password: String) : String {
+    suspend fun login(email: String, password: String): String {
         return alkeRepository.login(email, password)
     }
 
-    suspend fun getAllUsers(token: String) : MutableList<User> {
-        return alkeRepository.getAllUsers(token)
+    suspend fun myProfile(): UserDataResponse {
+        return alkeRepository.myProfile()
+    }
+
+    suspend fun myAccount(): MutableList<AccountResponse> {
+        return alkeRepository.myAccount()
+    }
+
+    suspend fun getAllUsers(): MutableList<User> {
+        return alkeRepository.getAllUsers()
     }
 }

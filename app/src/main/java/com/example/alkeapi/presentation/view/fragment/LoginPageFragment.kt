@@ -1,38 +1,45 @@
 package com.example.alkeapi.presentation.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.alkeapi.R
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
 import com.example.alkeapi.data.repository.AlkeRepositoryImplement
 import com.example.alkeapi.databinding.FragmentLoginBinding
+import com.example.alkeapi.databinding.FragmentLoginPageBinding
 import com.example.alkeapi.domain.AlkeUseCase
 import com.example.alkeapi.presentation.viewmodel.LoginViewModel
 import com.example.alkeapi.presentation.viewmodel.LoginViewModelFactory
 
-class LoginFragment : Fragment() {
+class LoginPageFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: FragmentLoginPageBinding
     private lateinit var loginViewModel: LoginViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
 
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLoginBinding.inflate(layoutInflater)
+        // Inflate the layout for this fragment
+        binding = FragmentLoginPageBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val context = requireContext()
         val alkeApiService = RetrofitHelper.getRetrofit(context).create(AlkeApiService::class.java)
         val alkeRepository = AlkeRepositoryImplement(alkeApiService, context)
@@ -41,42 +48,24 @@ class LoginFragment : Fragment() {
 
         loginViewModel = ViewModelProvider(this, loginViewModelFactory)[LoginViewModel::class.java]
 
-        observeViewModel()
-
         binding.btnLogin.setOnClickListener {
             login()
         }
 
-        binding.btnGetUsers.setOnClickListener {
-            loginViewModel.getAllUsers()
-        }
 
-    }
-
-    private fun observeViewModel() {
-        loginViewModel.loginResult.observe(viewLifecycleOwner) { token ->
-            binding.txtToken.text = token
-        }
-
-        loginViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            binding.txtToken.text = errorMessage
-        }
-
-        loginViewModel.usersResult.observe(viewLifecycleOwner) { users ->
-            users.forEach { user ->
-                Log.d("USERTEST", "User: ${user.toString()}")
-            }
-        }
     }
 
     private fun login() {
-        val email = binding.txtEmail.text.toString()
-        val password = binding.txtPassword.text.toString()
+        val email = binding.textInputEmail.editText?.text.toString()
+        val password = binding.textInputPassword.editText?.text.toString()
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
             loginViewModel.login(email, password)
+            findNavController().navigate(R.id.homePageFragment)
         } else {
-            binding.txtToken.text = "Please enter both email and password"
+            binding.textInputEmail.error = "Please enter email"
+            binding.textInputPassword.error = "Please enter password"
         }
     }
+
 }

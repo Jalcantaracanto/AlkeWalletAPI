@@ -7,13 +7,15 @@ import okhttp3.Response
 
 class TokenInterceptor(private val context : Context) :Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = SharedPreferencesHelper.getToken(context)
-        val request = chain.request().newBuilder()
+        val requestBuilder = chain.request().newBuilder()
 
-        token?.let{
-            request.addHeader("Authorization", "Bearer $token")
+        val token = SharedPreferencesHelper.getToken(context)
+
+        token?.let {
+            requestBuilder.addHeader("Authorization", "Bearer $it")
         }
-        return chain.proceed(request.build())
+
+        return chain.proceed(requestBuilder.build())
     }
 
 }
