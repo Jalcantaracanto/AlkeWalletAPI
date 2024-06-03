@@ -11,7 +11,7 @@ import com.example.alkeapi.data.response.UserDataResponse
 import com.example.alkeapi.domain.AlkeUseCase
 import kotlinx.coroutines.launch
 
-class HomePageViewModel(private val alkeUseCase: AlkeUseCase, private val context: Context) :
+class HomePageViewModel(private val alkeUseCase: AlkeUseCase) :
     ViewModel() {
 
     private val _user = MutableLiveData<UserDataResponse>()

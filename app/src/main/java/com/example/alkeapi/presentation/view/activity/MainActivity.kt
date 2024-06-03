@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.alkeapi.R
+import com.example.alkeapi.application.SharedPreferencesHelper
 import com.example.alkeapi.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,5 +20,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SharedPreferencesHelper.clearToken(this)
     }
 }
