@@ -45,8 +45,4 @@ object SharedPreferencesHelper {
         editor.apply()
     }
 
-    fun getIdUser(context: Context): String? {
-        return getSharedPreferences(context).getString(ID_USER_KEY, null)
-    }
-
 }

@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alkeapi.R
 import com.example.alkeapi.data.response.TransactionDataResponse
+import com.example.alkeapi.data.response.UserDataResponse
 import com.example.alkeapi.databinding.TransactionItemBinding
 import com.example.alkeapi.presentation.viewmodel.HomePageViewModel
 import java.time.ZonedDateTime
@@ -35,7 +37,6 @@ class TransactionAdapter(
         return TransactionViewHolder(bindingItem)
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
@@ -49,58 +50,55 @@ class TransactionAdapter(
     fun setTransactions(newTransactions: MutableList<TransactionDataResponse>) {
         transactions = newTransactions
         notifyDataSetChanged()
+        checkIfEmpty()
     }
+
+    private fun checkIfEmpty() {
+        if (transactions.isEmpty()) {
+            onTransactionsEmptyListener?.invoke(true)
+        } else {
+            onTransactionsEmptyListener?.invoke(false)
+        }
+    }
+
+    var onTransactionsEmptyListener: ((Boolean) -> Unit)? = null
 
     inner class TransactionViewHolder(private val bindingItem: TransactionItemBinding) :
         RecyclerView.ViewHolder(bindingItem.root) {
 
+
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(transaction: TransactionDataResponse) {
+            bindingItem.imageprofile.setImageResource(getRandomImageResource())
             bindingItem.txtfecha.text = formatDate(transaction.date)
 
-            homePageViewModel.getUserTransactionDetails(transaction)
-            homePageViewModel.userTransactionDetails.observe(lifecycleOwner, Observer { pair ->
-                val account = pair.first
-                val userTransaction = pair.second
+            homePageViewModel.getAccountById(transaction.to_account_id)
 
+
+            homePageViewModel.userAccount.observe(lifecycleOwner, Observer { account ->
                 if (account != null && account.id == transaction.to_account_id) {
-                    if (userTransaction != null) {
-                        bindingItem.txtnombrereceptor.text = userTransaction.first_name + " " + userTransaction.last_name
-                        if (account.userId == userTransaction.id) {
-                            bindingItem.receiverarrow.visibility = View.VISIBLE
-                            bindingItem.txtcantidad.text = "+$" + String.format("%.2f", transaction.amount)
-                        } else {
-                            bindingItem.receiverarrow.visibility = View.GONE
-                            bindingItem.txtcantidad.text = "-$" + String.format("%.2f", transaction.amount)
-                        }
-                    }
-                    bindingItem.imageprofile.setImageResource(getRandomImageResource())
+                    homePageViewModel.getUserById(account.userId)
+
+                    homePageViewModel.userById.observe(
+                        lifecycleOwner,
+                        Observer { userTransactionList ->
+                            val userTransaction = userTransactionList.find { it.id == account.userId }
+                            userTransaction?.let {
+                                bindingItem.txtnombrereceptor.text = it.first_name + " " + it.last_name
+                            }
+
+                            if (homePageViewModel.user.value?.id == account.userId) {
+                                bindingItem.receiverarrow.visibility = View.VISIBLE
+                                bindingItem.senderarrow.visibility = View.GONE
+                                bindingItem.txtcantidad.text = "+$" + transaction.amount.toString()
+                            } else {
+                                bindingItem.receiverarrow.visibility = View.GONE
+                                bindingItem.senderarrow.visibility = View.VISIBLE
+                                bindingItem.txtcantidad.text = "-$" + transaction.amount.toString()
+                            }
+                        })
                 }
             })
-
-//            homePageViewModel.getAccountById(transaction.to_account_id)
-//            homePageViewModel.userAccount.observe(lifecycleOwner, Observer { account ->
-//                if (account != null && account.id == transaction.to_account_id) {
-//                    homePageViewModel.getUserById(account.userId)
-//
-//                    homePageViewModel.userTransaction.observe(lifecycleOwner, Observer {
-//                        if (it != null) {
-//                            bindingItem.txtnombrereceptor.text = it.first_name + " " + it.last_name
-//                        }
-//
-//                        if (account.userId == it?.id){
-//                            bindingItem.receiverarrow.visibility = View.VISIBLE
-//                            bindingItem.txtcantidad.text = "+$" + String.format("%.2f", transaction.amount.toString())
-//                        }else{
-//                            bindingItem.receiverarrow.visibility = View.GONE
-//                            bindingItem.txtcantidad.text = "-$" + String.format("%.2f", transaction.amount.toString())
-//                        }
-//                    })
-//
-//                }
-//
-//            })
-            bindingItem.imageprofile.setImageResource(getRandomImageResource())
         }
 
         private fun getRandomImageResource(): Int {
@@ -116,7 +114,8 @@ class TransactionAdapter(
 
         @RequiresApi(Build.VERSION_CODES.O)
         private fun formatDate(dateString: String): String {
-            val zonedDateTime = ZonedDateTime.parse(dateString, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+            val zonedDateTime =
+                ZonedDateTime.parse(dateString, DateTimeFormatter.ISO_ZONED_DATE_TIME)
             val desiredFormat = DateTimeFormatter.ofPattern("MMM dd, hh:mm a", Locale.ENGLISH)
             return zonedDateTime.format(desiredFormat)
         }

@@ -46,6 +46,7 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.ui.text.android)
     ksp(libs.androidx.room.compiler)
 
     // ViewModel

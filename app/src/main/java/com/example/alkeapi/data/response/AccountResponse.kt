@@ -1,11 +1,11 @@
 package com.example.alkeapi.data.response
 
+import com.example.alkeapi.data.model.User
+
 data class AccountResponse(
-    val createdAt: String,
-    val creationDate: String,
-    val id: Int,
-    val isBlocked: Boolean,
-    val money: String,
-    val updatedAt: String,
-    val userId: Int
-)
+    val previousPage: String?,
+    val nextPage: String?,
+    val data: MutableList<AccountDataResponse>
+) {
+
+}

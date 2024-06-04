@@ -1,13 +1,13 @@
 package com.example.alkeapi.data.repository
 
-import android.content.Context
-import android.util.Log
-import com.example.alkeapi.application.SharedPreferencesHelper
+import android.widget.Toast
 import com.example.alkeapi.data.model.Login
 import com.example.alkeapi.data.model.User
 import com.example.alkeapi.data.network.api.AlkeApiService
+import com.example.alkeapi.data.response.AccountDataResponse
 import com.example.alkeapi.data.response.AccountResponse
 import com.example.alkeapi.data.response.TransactionDataResponse
+import com.example.alkeapi.data.response.TransactionPost
 import com.example.alkeapi.data.response.UserDataResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,7 +36,7 @@ class AlkeRepositoryImplement(
         }
     }
 
-    override suspend fun myAccount(): MutableList<AccountResponse> {
+    override suspend fun myAccount(): MutableList<AccountDataResponse> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.myAccount()
@@ -69,7 +69,7 @@ class AlkeRepositoryImplement(
         }
     }
 
-    override suspend fun getAccountsById(id: Int): AccountResponse {
+    override suspend fun getAccountsById(id: Int): AccountDataResponse {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getAccountById(id)
@@ -91,8 +91,26 @@ class AlkeRepositoryImplement(
         }
     }
 
-    override suspend fun createTransaction(transaction: TransactionDataResponse): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun createTransaction(transaction: TransactionPost): Boolean {
+        return withContext(Dispatchers.IO){
+            try {
+                val response = apiService.createTransactions(transaction)
+                response.isSuccessful
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    override suspend fun getAllAccounts(): MutableList<AccountDataResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getAllAccounts()
+                response.data
+            } catch (e: Exception) {
+                throw e
+            }
+        }
     }
 
 }

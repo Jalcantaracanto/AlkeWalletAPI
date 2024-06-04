@@ -55,7 +55,6 @@ class HomePageFragment : Fragment() {
         binding.btnSendMoney.setOnClickListener { navController.navigate(R.id.sendMoneyFragment) }
 
         homePageViewModel.user.observe(viewLifecycleOwner) { user ->
-            Log.d("TESTUSER", "onViewCreated: $user")
             binding.txtName.text = user.first_name
         }
 
@@ -71,6 +70,18 @@ class HomePageFragment : Fragment() {
         transactionAdapter = TransactionAdapter(homePageViewModel, viewLifecycleOwner)
         binding.recyclerTransferencias.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerTransferencias.adapter = transactionAdapter
+
+        transactionAdapter.onTransactionsEmptyListener = { isEmpty ->
+            if (isEmpty) {
+                binding.recyclerTransferencias.visibility = View.GONE
+                binding.imgEmptyTransaction.visibility = View.VISIBLE
+                binding.txtEmptyTransaction.visibility = View.VISIBLE
+            } else {
+                binding.recyclerTransferencias.visibility = View.VISIBLE
+                binding.imgEmptyTransaction.visibility = View.GONE
+                binding.txtEmptyTransaction.visibility = View.GONE
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -78,8 +89,5 @@ class HomePageFragment : Fragment() {
         SharedPreferencesHelper.clearUserData(requireContext())
         SharedPreferencesHelper.clearToken(requireContext())
     }
-
-
-
 
 }

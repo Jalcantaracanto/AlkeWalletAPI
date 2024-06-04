@@ -1,12 +1,11 @@
 package com.example.alkeapi.presentation.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.alkeapi.application.SharedPreferencesHelper
+import com.example.alkeapi.data.response.AccountDataResponse
 import com.example.alkeapi.data.response.AccountResponse
 import com.example.alkeapi.data.response.TransactionDataResponse
 import com.example.alkeapi.data.response.UserDataResponse
@@ -21,8 +20,8 @@ class HomePageViewModel(private val alkeUseCase: AlkeUseCase) :
     private val _user = MutableLiveData<UserDataResponse>()
     val user: LiveData<UserDataResponse> = _user
 
-    private val _account = MutableLiveData<AccountResponse>()
-    val account: LiveData<AccountResponse> = _account
+    private val _account = MutableLiveData<AccountDataResponse>()
+    val account: LiveData<AccountDataResponse> = _account
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
@@ -30,16 +29,18 @@ class HomePageViewModel(private val alkeUseCase: AlkeUseCase) :
     private val _transactions = MutableLiveData<MutableList<TransactionDataResponse>>()
     val transactions: LiveData<MutableList<TransactionDataResponse>> get() = _transactions
 
-    private val _userTransactionDetails = MutableLiveData<Pair<AccountResponse, UserDataResponse?>>()
-    val userTransactionDetails: LiveData<Pair<AccountResponse, UserDataResponse?>> = _userTransactionDetails
 
-//    private val _userAccount = MutableLiveData<AccountResponse>()
-//    val userAccount: LiveData<AccountResponse> = _userAccount
-//
-//    private val _userTransaction = MutableLiveData<UserDataResponse>()
-//    val userTransaction: LiveData<UserDataResponse> = _userTransaction
+    private val _userAccount = MutableLiveData<AccountDataResponse>()
+    val userAccount: LiveData<AccountDataResponse> = _userAccount
+
+    private val _userTransaction = MutableLiveData<UserDataResponse>()
+    val userTransaction: LiveData<UserDataResponse> = _userTransaction
+
+    private val _userById = MutableLiveData<MutableList<UserDataResponse>>()
+    val userById: LiveData<MutableList<UserDataResponse>> get() = _userById
 
     init {
+        _userById.value = mutableListOf()
         myTransactions()
         myProfile()
         myAccount()
@@ -69,50 +70,44 @@ class HomePageViewModel(private val alkeUseCase: AlkeUseCase) :
 
     fun myTransactions() {
         viewModelScope.launch {
-            val transactions = withContext(Dispatchers.IO) {
-                try {
-                    alkeUseCase.myTransactions()
-                } catch (e: Exception) {
-                    throw e
-                }
-            }
-            Log.d("TESTTRANSACTIONS", transactions.toString())
-            _transactions.postValue(transactions)
-        }
-    }
-
-    fun getUserTransactionDetails(transaction: TransactionDataResponse) {
-        viewModelScope.launch {
             try {
-                val account = alkeUseCase.getAccountById(transaction.to_account_id)
-                val userTransaction = account?.userId?.let { alkeUseCase.getUserById(it) }
-                _userTransactionDetails.value = Pair(account, userTransaction)
+                val transactions = withContext(Dispatchers.IO) {
+                    alkeUseCase.myTransactions()
+                }
+                Log.d("TESTTRANSACTIONS", transactions.toString())
+                _transactions.postValue(transactions)
+
+                transactions.forEach { transaction ->
+                    getUserById(transaction.userId)
+                }
             } catch (e: Exception) {
                 _error.value = e.message
             }
         }
     }
 
-//    fun getUserById(id: Int) {
-//        viewModelScope.launch {
-//            try {
-//                val userTransaction = alkeUseCase.getUserById(id)
-//                _userTransaction.value = userTransaction
-//            } catch (e: Exception) {
-//                _error.value = e.message
-//            }
-//        }
-//    }
-//
-//    fun getAccountById(id: Int) {
-//        viewModelScope.launch {
-//            try {
-//                val account = alkeUseCase.getAccountById(id)
-//                _userAccount.value = account
-//            } catch (e: Exception) {
-//                throw e
-//            }
-//        }
-//
-//    }
+    fun getUserById(id: Int) {
+        viewModelScope.launch {
+            try {
+                val userTransaction = alkeUseCase.getUserById(id)
+                _userById.value?.let {
+                    it.add(userTransaction)
+                    _userById.postValue(it)
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
+        }
+    }
+
+    fun getAccountById(id: Int) {
+        viewModelScope.launch {
+            try {
+                val account = alkeUseCase.getAccountById(id)
+                _userAccount.value = account
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
 }

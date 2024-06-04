@@ -1,11 +1,10 @@
 package com.example.alkeapi.domain
 
-import android.service.autofill.UserData
 import com.example.alkeapi.data.model.User
 import com.example.alkeapi.data.repository.AlkeRepositoryImplement
-import com.example.alkeapi.data.response.AccountResponse
-import com.example.alkeapi.data.response.LoginResponse
+import com.example.alkeapi.data.response.AccountDataResponse
 import com.example.alkeapi.data.response.TransactionDataResponse
+import com.example.alkeapi.data.response.TransactionPost
 import com.example.alkeapi.data.response.UserDataResponse
 
 class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
@@ -18,7 +17,7 @@ class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
         return alkeRepository.myProfile()
     }
 
-    suspend fun myAccount(): MutableList<AccountResponse> {
+    suspend fun myAccount(): MutableList<AccountDataResponse> {
         return alkeRepository.myAccount()
     }
 
@@ -35,11 +34,15 @@ class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
     }
 
 
-    suspend fun getAccountById(id: Int): AccountResponse {
+    suspend fun getAccountById(id: Int): AccountDataResponse {
         return alkeRepository.getAccountsById(id)
     }
 
-    suspend fun createTransaction(transaction: TransactionDataResponse): Boolean {
+    suspend fun createTransaction(transaction: TransactionPost): Boolean {
         return alkeRepository.createTransaction(transaction)
+    }
+
+    suspend fun getAllAccounts(): MutableList<AccountDataResponse> {
+        return alkeRepository.getAllAccounts()
     }
 }

@@ -1,35 +1,39 @@
 package com.example.alkeapi.presentation.viewmodel
 
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.alkeapi.data.model.User
-import com.example.alkeapi.data.response.AccountResponse
+import com.example.alkeapi.data.response.AccountDataResponse
+import com.example.alkeapi.data.response.TransactionPost
 import com.example.alkeapi.data.response.UserDataResponse
 import com.example.alkeapi.domain.AlkeUseCase
 import kotlinx.coroutines.launch
 
-class SendMoneyViewModel(private val alkeUseCase: AlkeUseCase) :
-    ViewModel() {
+class SendMoneyViewModel(private val alkeUseCase: AlkeUseCase) : ViewModel() {
 
     private val _user = MutableLiveData<UserDataResponse>()
-    val user: LiveData<UserDataResponse> = _user
+    val user: LiveData<UserDataResponse> get() = _user
 
-    private val _account = MutableLiveData<AccountResponse>()
-    val account: LiveData<AccountResponse> = _account
+    private val _account = MutableLiveData<AccountDataResponse>()
+    val account: LiveData<AccountDataResponse> get() = _account
 
     private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+    val error: LiveData<String> get() = _error
 
     private val _usersResult = MutableLiveData<MutableList<User>>()
-    val usersResult: LiveData<MutableList<User>> = _usersResult
+    val usersResult: LiveData<MutableList<User>> get() = _usersResult
+
+    private val _accountResult = MutableLiveData<MutableList<AccountDataResponse>>()
+    val accountResult: LiveData<MutableList<AccountDataResponse>> get() = _accountResult
+
+    private val _transactionResult = MutableLiveData<Boolean>()
+    val transactionResult: LiveData<Boolean> get() = _transactionResult
+
 
     init {
         myProfile()
         myAccount()
         getAllUsers()
+        getAllAccounts()
     }
 
     fun myProfile() {
@@ -65,5 +69,27 @@ class SendMoneyViewModel(private val alkeUseCase: AlkeUseCase) :
         }
     }
 
+    fun createTransaction(transaction: TransactionPost) {
+        viewModelScope.launch {
+            try {
+                val result = alkeUseCase.createTransaction(transaction)
+                _transactionResult.value = result
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
+        }
+    }
+
+    fun getAllAccounts() {
+        viewModelScope.launch {
+            try {
+                val allAccounts = alkeUseCase.getAllAccounts()
+                val uniqueUserAccounts = allAccounts.groupBy { it.userId }.map { it.value.first() }
+                _accountResult.value = uniqueUserAccounts.toMutableList()
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
+        }
+    }
 
 }
