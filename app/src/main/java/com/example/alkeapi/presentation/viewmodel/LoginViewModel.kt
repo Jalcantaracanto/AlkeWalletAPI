@@ -24,8 +24,7 @@ class LoginViewModel(private val alkeUseCase: AlkeUseCase, private val context: 
     private val _userProfileSaved = MutableLiveData<Boolean>()
     val userProfileSaved: LiveData<Boolean> = _userProfileSaved
 
-    private val _usersResult = MutableLiveData<MutableList<User>>()
-    val usersResult: LiveData<MutableList<User>> = _usersResult
+
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -57,14 +56,5 @@ class LoginViewModel(private val alkeUseCase: AlkeUseCase, private val context: 
         }
     }
 
-    fun getAllUsers() {
-        viewModelScope.launch {
-            try {
-                val users = alkeUseCase.getAllUsers()
-                _usersResult.value = users
-            } catch (e: Exception) {
-                _error.value = e.message
-            }
-        }
-    }
+
 }

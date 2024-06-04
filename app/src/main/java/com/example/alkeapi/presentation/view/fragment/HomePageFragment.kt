@@ -45,13 +45,11 @@ class HomePageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val context = requireContext()
         val alkeApiService = RetrofitHelper.getRetrofit(context).create(AlkeApiService::class.java)
-        val alkeRepository = AlkeRepositoryImplement(alkeApiService, context)
+        val alkeRepository = AlkeRepositoryImplement(alkeApiService)
         val alkeUseCase = AlkeUseCase(alkeRepository)
         val ViewModelFactory = HomePageViewModelFactory(alkeUseCase)
 
         homePageViewModel = ViewModelProvider(this, ViewModelFactory)[HomePageViewModel::class.java]
-        homePageViewModel.myProfile()
-        homePageViewModel.myAccount()
         val navController = Navigation.findNavController(view)
 
         binding.btnSendMoney.setOnClickListener { navController.navigate(R.id.sendMoneyFragment) }
@@ -80,6 +78,8 @@ class HomePageFragment : Fragment() {
         SharedPreferencesHelper.clearUserData(requireContext())
         SharedPreferencesHelper.clearToken(requireContext())
     }
+
+
 
 
 }

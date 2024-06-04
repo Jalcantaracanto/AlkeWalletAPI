@@ -41,6 +41,8 @@ class HomePageViewModel(private val alkeUseCase: AlkeUseCase) :
 
     init {
         myTransactions()
+        myProfile()
+        myAccount()
     }
 
     fun myProfile() {

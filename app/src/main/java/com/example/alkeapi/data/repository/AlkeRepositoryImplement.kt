@@ -13,8 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AlkeRepositoryImplement(
-    private val apiService: AlkeApiService,
-    private val context: Context
+    private val apiService: AlkeApiService
 ) : AlkeRepository {
 
 

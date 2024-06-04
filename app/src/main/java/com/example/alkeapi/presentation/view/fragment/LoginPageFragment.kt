@@ -43,7 +43,7 @@ class LoginPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val context = requireContext()
         val alkeApiService = RetrofitHelper.getRetrofit(context).create(AlkeApiService::class.java)
-        val alkeRepository = AlkeRepositoryImplement(alkeApiService, context)
+        val alkeRepository = AlkeRepositoryImplement(alkeApiService)
         val alkeUseCase = AlkeUseCase(alkeRepository)
         val loginViewModelFactory = LoginViewModelFactory(alkeUseCase, context)
 
