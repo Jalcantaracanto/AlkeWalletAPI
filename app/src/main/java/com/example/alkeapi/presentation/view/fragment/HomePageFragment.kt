@@ -29,8 +29,6 @@ class HomePageFragment : Fragment() {
     private lateinit var transactionAdapter: TransactionAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
     }
 
     override fun onCreateView(
@@ -53,6 +51,8 @@ class HomePageFragment : Fragment() {
         val navController = Navigation.findNavController(view)
 
         binding.btnSendMoney.setOnClickListener { navController.navigate(R.id.sendMoneyFragment) }
+        binding.btnRequestMoney.setOnClickListener { navController.navigate(R.id.requestMoneyFragment) }
+        binding.imgUserProfile.setOnClickListener{ navController.navigate(R.id.profilePageFragment) }
 
         homePageViewModel.user.observe(viewLifecycleOwner) { user ->
             binding.txtName.text = user.first_name

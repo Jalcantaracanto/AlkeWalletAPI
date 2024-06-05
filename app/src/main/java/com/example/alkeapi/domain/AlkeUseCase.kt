@@ -3,9 +3,11 @@ package com.example.alkeapi.domain
 import com.example.alkeapi.data.model.User
 import com.example.alkeapi.data.repository.AlkeRepositoryImplement
 import com.example.alkeapi.data.response.AccountDataResponse
+import com.example.alkeapi.data.response.AccountPost
 import com.example.alkeapi.data.response.TransactionDataResponse
 import com.example.alkeapi.data.response.TransactionPost
 import com.example.alkeapi.data.response.UserDataResponse
+import com.example.alkeapi.data.response.UserPost
 
 class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
 
@@ -23,6 +25,14 @@ class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
 
     suspend fun myTransactions(): MutableList<TransactionDataResponse> {
         return alkeRepository.myTransactions()
+    }
+
+    suspend fun createUser(user: UserPost): Boolean {
+        return alkeRepository.createUser(user)
+    }
+
+    suspend fun createAccount(account: AccountPost): Boolean {
+        return alkeRepository.createAccount(account)
     }
 
     suspend fun getUserById(id: Int): UserDataResponse {

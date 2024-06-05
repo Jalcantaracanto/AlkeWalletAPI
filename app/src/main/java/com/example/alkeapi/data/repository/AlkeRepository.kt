@@ -2,10 +2,12 @@ package com.example.alkeapi.data.repository
 
 import com.example.alkeapi.data.model.User
 import com.example.alkeapi.data.response.AccountDataResponse
+import com.example.alkeapi.data.response.AccountPost
 import com.example.alkeapi.data.response.AccountResponse
 import com.example.alkeapi.data.response.TransactionDataResponse
 import com.example.alkeapi.data.response.TransactionPost
 import com.example.alkeapi.data.response.UserDataResponse
+import com.example.alkeapi.data.response.UserPost
 
 interface AlkeRepository {
 
@@ -17,7 +19,11 @@ interface AlkeRepository {
 
     suspend fun myTransactions(): MutableList<TransactionDataResponse>
 
+    suspend fun createUser(user: UserPost): Boolean
+
     suspend fun getUserById(id: Int): UserDataResponse
+
+    suspend fun createAccount(account: AccountPost): Boolean
 
     suspend fun getAccountsById(id: Int): AccountDataResponse
 

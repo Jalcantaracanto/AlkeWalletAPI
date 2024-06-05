@@ -2,11 +2,13 @@ package com.example.alkeapi.data.network.api
 
 import com.example.alkeapi.data.model.Login
 import com.example.alkeapi.data.response.AccountDataResponse
+import com.example.alkeapi.data.response.AccountPost
 import com.example.alkeapi.data.response.AccountResponse
 import com.example.alkeapi.data.response.LoginResponse
 import com.example.alkeapi.data.response.TransactionPost
 import com.example.alkeapi.data.response.TransactionResponse
 import com.example.alkeapi.data.response.UserDataResponse
+import com.example.alkeapi.data.response.UserPost
 import com.example.alkeapi.data.response.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -39,6 +41,9 @@ interface AlkeApiService {
      * Servicios De Usuarios
      */
 
+    @POST("users")
+    suspend fun createUser(@Body data: UserPost): Response<Void>
+
     @GET("users")
     suspend fun getAllUsers(): UserResponse
 
@@ -49,6 +54,9 @@ interface AlkeApiService {
     /**
      * Servicios De Cuenta
      */
+
+    @POST("accounts")
+    suspend fun createAccount(@Body data: AccountPost): Response<Void>
 
     @GET("accounts/{id}")
     suspend fun getAccountById(@Path("id") id: Int): AccountDataResponse

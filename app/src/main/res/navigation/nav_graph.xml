@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginPageFragment">
+    app:startDestination="@id/loginSignupFragment">
 
     <fragment
         android:id="@+id/loginPageFragment"
@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_loginPageFragment_to_homePageFragment"
             app:destination="@id/homePageFragment" />
+        <action
+            android:id="@+id/action_loginPageFragment_to_signupPageFragment"
+            app:destination="@id/signupPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/homePageFragment"
@@ -21,10 +24,47 @@
         <action
             android:id="@+id/action_homePageFragment_to_sendMoneyFragment"
             app:destination="@id/sendMoneyFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_requestMoneyFragment"
+            app:destination="@id/requestMoneyFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_profilePageFragment"
+            app:destination="@id/profilePageFragment" />
     </fragment>
     <fragment
         android:id="@+id/sendMoneyFragment"
         android:name="com.example.alkeapi.presentation.view.fragment.SendMoneyFragment"
         android:label="fragment_send_money"
         tools:layout="@layout/fragment_send_money" />
+    <fragment
+        android:id="@+id/requestMoneyFragment"
+        android:name="com.example.alkeapi.presentation.view.fragment.RequestMoneyFragment"
+        android:label="fragment_request_money"
+        tools:layout="@layout/fragment_request_money" />
+    <fragment
+        android:id="@+id/profilePageFragment"
+        android:name="com.example.alkeapi.presentation.view.fragment.ProfilePageFragment"
+        android:label="fragment_profile_page"
+        tools:layout="@layout/fragment_profile_page" />
+    <fragment
+        android:id="@+id/signupPageFragment"
+        android:name="com.example.alkeapi.presentation.view.fragment.SignupPageFragment"
+        android:label="fragment_signup_page"
+        tools:layout="@layout/fragment_signup_page" >
+        <action
+            android:id="@+id/action_signupPageFragment_to_loginPageFragment"
+            app:destination="@id/loginPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginSignupFragment"
+        android:name="com.example.alkeapi.presentation.view.fragment.LoginSignupFragment"
+        android:label="fragment_login_signup"
+        tools:layout="@layout/fragment_login_signup" >
+        <action
+            android:id="@+id/action_loginSignupFragment_to_signupPageFragment"
+            app:destination="@id/signupPageFragment" />
+        <action
+            android:id="@+id/action_loginSignupFragment_to_loginPageFragment"
+            app:destination="@id/loginPageFragment" />
+    </fragment>
 </navigation>
