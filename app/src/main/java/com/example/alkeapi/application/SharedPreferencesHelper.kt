@@ -3,7 +3,7 @@ package com.example.alkeapi.application
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.alkeapi.data.response.UserDataResponse
+import com.example.alkeapi.data.network.response.UserDataResponse
 
 object SharedPreferencesHelper {
 
@@ -36,7 +36,7 @@ object SharedPreferencesHelper {
         val editor = getSharedPreferences(context).edit()
         editor.remove(ID_USER_KEY)
         editor.apply()
-        Log.d("TOKENCLEAR", "TOKEN LIMPIADO")
+        Log.d("TOKENCLEAR", "USER DATA LIMPIADO")
     }
 
     fun idUserLogged(context: Context, idUser: Int) {

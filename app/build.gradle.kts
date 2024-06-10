@@ -58,7 +58,6 @@ dependencies {
 
     implementation (libs.gson)
     implementation (libs.converter.gson)
-
     //Picasso
     implementation (libs.picasso)
 
@@ -71,4 +70,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation (libs.bcrypt)
 }

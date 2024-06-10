@@ -12,17 +12,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.alkeapi.R
-import com.example.alkeapi.data.model.User
+import com.example.alkeapi.data.local.database.AppDatabase
+import com.example.alkeapi.data.local.model.Transaction
+import com.example.alkeapi.data.local.model.User
+import com.example.alkeapi.data.local.repository.TransactionR
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
-import com.example.alkeapi.data.repository.AlkeRepositoryImplement
-import com.example.alkeapi.data.response.AccountDataResponse
-import com.example.alkeapi.data.response.TransactionPost
+import com.example.alkeapi.data.network.repository.AlkeRepositoryImplement
+import com.example.alkeapi.data.network.response.AccountDataResponse
+import com.example.alkeapi.data.network.response.TransactionPost
 import com.example.alkeapi.databinding.FragmentSendMoneyBinding
 import com.example.alkeapi.domain.AlkeUseCase
+import com.example.alkeapi.domain.DatabaseUseCase
 import com.example.alkeapi.presentation.adapter.ContactAdapter
-import com.example.alkeapi.presentation.viewmodel.SendMoneyViewModel
-import com.example.alkeapi.presentation.viewmodel.SendMoneyViewModelFactory
+import com.example.alkeapi.presentation.viewmodel.sendmoney.SendMoneyViewModel
+import com.example.alkeapi.presentation.viewmodel.sendmoney.SendMoneyViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -55,6 +59,7 @@ class SendMoneyFragment : Fragment() {
             val selectedAccount = binding.spinnerSendMoney.selectedItem as AccountDataResponse
             val amountText = binding.txtAmount.editText?.text.toString()
             val concept = binding.txtConcept.text.toString()
+            val UserSelected = validUsers.find { it.id == selectedAccount.userId }
 
             if (amountText.isEmpty() || concept.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter all fields", Toast.LENGTH_SHORT)
@@ -81,6 +86,20 @@ class SendMoneyFragment : Fragment() {
                     selectedAccount.id
                 )
 
+                val userName = user.first_name + " " + user.last_name
+                val userSelectedName = UserSelected?.first_name + " " + UserSelected?.last_name
+
+                val newTransactionDataBase = Transaction(
+                    sender_name = userSelectedName,
+                    receiver_name = userName,
+                    transacion_date = formattedDate,
+                    isReceiver = false,
+                    amount = amount.toString().toDouble(),
+                    concept = concept
+                )
+
+                sendMoneyViewModel.insertTransaction(newTransactionDataBase)
+
                 sendMoneyViewModel.createTransaction(newTransaction)
                 Toast.makeText(
                     requireContext(),
@@ -104,7 +123,12 @@ class SendMoneyFragment : Fragment() {
         val alkeApiService = RetrofitHelper.getRetrofit(context).create(AlkeApiService::class.java)
         val alkeRepository = AlkeRepositoryImplement(alkeApiService)
         val alkeUseCase = AlkeUseCase(alkeRepository)
-        val viewModelFactory = SendMoneyViewModelFactory(alkeUseCase)
+
+        val database = AppDatabase.getDatabase(requireContext())
+        val databaseRepository = TransactionR(database.transactionDao())
+        val databaseUseCase = DatabaseUseCase(databaseRepository)
+
+        val viewModelFactory = SendMoneyViewModelFactory(alkeUseCase, databaseUseCase)
 
         sendMoneyViewModel =
             ViewModelProvider(this, viewModelFactory)[SendMoneyViewModel::class.java]

@@ -1,13 +1,13 @@
 package com.example.alkeapi.domain
 
-import com.example.alkeapi.data.model.User
-import com.example.alkeapi.data.repository.AlkeRepositoryImplement
-import com.example.alkeapi.data.response.AccountDataResponse
-import com.example.alkeapi.data.response.AccountPost
-import com.example.alkeapi.data.response.TransactionDataResponse
-import com.example.alkeapi.data.response.TransactionPost
-import com.example.alkeapi.data.response.UserDataResponse
-import com.example.alkeapi.data.response.UserPost
+import com.example.alkeapi.data.local.model.User
+import com.example.alkeapi.data.network.repository.AlkeRepositoryImplement
+import com.example.alkeapi.data.network.response.AccountDataResponse
+import com.example.alkeapi.data.network.response.AccountPost
+import com.example.alkeapi.data.network.response.TransactionDataResponse
+import com.example.alkeapi.data.network.response.TransactionPost
+import com.example.alkeapi.data.network.response.UserDataResponse
+import com.example.alkeapi.data.network.response.UserPost
 
 class AlkeUseCase(private val alkeRepository: AlkeRepositoryImplement) {
 

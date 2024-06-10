@@ -1,15 +1,15 @@
 package com.example.alkeapi.data.network.api
 
-import com.example.alkeapi.data.model.Login
-import com.example.alkeapi.data.response.AccountDataResponse
-import com.example.alkeapi.data.response.AccountPost
-import com.example.alkeapi.data.response.AccountResponse
-import com.example.alkeapi.data.response.LoginResponse
-import com.example.alkeapi.data.response.TransactionPost
-import com.example.alkeapi.data.response.TransactionResponse
-import com.example.alkeapi.data.response.UserDataResponse
-import com.example.alkeapi.data.response.UserPost
-import com.example.alkeapi.data.response.UserResponse
+import com.example.alkeapi.data.network.response.LoginPost
+import com.example.alkeapi.data.network.response.AccountDataResponse
+import com.example.alkeapi.data.network.response.AccountPost
+import com.example.alkeapi.data.network.response.AccountResponse
+import com.example.alkeapi.data.network.response.LoginResponse
+import com.example.alkeapi.data.network.response.TransactionPost
+import com.example.alkeapi.data.network.response.TransactionResponse
+import com.example.alkeapi.data.network.response.UserDataResponse
+import com.example.alkeapi.data.network.response.UserPost
+import com.example.alkeapi.data.network.response.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,7 +25,7 @@ interface AlkeApiService {
 
     @Headers("Content-type:application/json")
     @POST("auth/login")
-    suspend fun login(@Body data: Login): LoginResponse
+    suspend fun login(@Body data: LoginPost): LoginResponse
 
     /**
      * Servicios Perfil De Usuario

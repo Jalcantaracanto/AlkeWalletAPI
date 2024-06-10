@@ -5,17 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.alkeapi.R
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
-import com.example.alkeapi.data.repository.AlkeRepositoryImplement
+import com.example.alkeapi.data.network.repository.AlkeRepositoryImplement
 import com.example.alkeapi.databinding.FragmentLoginPageBinding
 import com.example.alkeapi.domain.AlkeUseCase
-import com.example.alkeapi.presentation.viewmodel.LoginViewModel
-import com.example.alkeapi.presentation.viewmodel.LoginViewModelFactory
+import com.example.alkeapi.presentation.viewmodel.login.LoginViewModel
+import com.example.alkeapi.presentation.viewmodel.login.LoginViewModelFactory
 
 class LoginPageFragment : Fragment() {
 

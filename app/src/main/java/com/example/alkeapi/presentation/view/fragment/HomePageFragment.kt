@@ -1,7 +1,6 @@
 package com.example.alkeapi.presentation.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,18 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alkeapi.R
 import com.example.alkeapi.application.SharedPreferencesHelper
+import com.example.alkeapi.data.local.database.AppDatabase
+import com.example.alkeapi.data.local.repository.TransactionR
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
-import com.example.alkeapi.data.repository.AlkeRepositoryImplement
+import com.example.alkeapi.data.network.repository.AlkeRepositoryImplement
 import com.example.alkeapi.databinding.FragmentHomePageBinding
 import com.example.alkeapi.domain.AlkeUseCase
+import com.example.alkeapi.domain.DatabaseUseCase
+import com.example.alkeapi.presentation.adapter.TestAdapter
 import com.example.alkeapi.presentation.adapter.TransactionAdapter
-import com.example.alkeapi.presentation.viewmodel.HomePageViewModel
-import com.example.alkeapi.presentation.viewmodel.HomePageViewModelFactory
-import com.example.alkeapi.presentation.viewmodel.LoginViewModelFactory
+import com.example.alkeapi.presentation.viewmodel.home.HomePageViewModel
+import com.example.alkeapi.presentation.viewmodel.home.HomePageViewModelFactory
 
 
 class HomePageFragment : Fragment() {
@@ -27,6 +29,7 @@ class HomePageFragment : Fragment() {
     private lateinit var binding: FragmentHomePageBinding
     private lateinit var homePageViewModel: HomePageViewModel
     private lateinit var transactionAdapter: TransactionAdapter
+    private lateinit var testAdapter: TestAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -45,7 +48,11 @@ class HomePageFragment : Fragment() {
         val alkeApiService = RetrofitHelper.getRetrofit(context).create(AlkeApiService::class.java)
         val alkeRepository = AlkeRepositoryImplement(alkeApiService)
         val alkeUseCase = AlkeUseCase(alkeRepository)
-        val ViewModelFactory = HomePageViewModelFactory(alkeUseCase)
+
+        val database = AppDatabase.getDatabase(requireContext())
+        val databaseRepository = TransactionR(database.transactionDao())
+        val databaseUseCase = DatabaseUseCase(databaseRepository)
+        val ViewModelFactory = HomePageViewModelFactory(alkeUseCase, databaseUseCase)
 
         homePageViewModel = ViewModelProvider(this, ViewModelFactory)[HomePageViewModel::class.java]
         val navController = Navigation.findNavController(view)
@@ -67,21 +74,24 @@ class HomePageFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        transactionAdapter = TransactionAdapter(homePageViewModel, viewLifecycleOwner)
-        binding.recyclerTransferencias.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerTransferencias.adapter = transactionAdapter
-
-        transactionAdapter.onTransactionsEmptyListener = { isEmpty ->
-            if (isEmpty) {
-                binding.recyclerTransferencias.visibility = View.GONE
-                binding.imgEmptyTransaction.visibility = View.VISIBLE
-                binding.txtEmptyTransaction.visibility = View.VISIBLE
-            } else {
-                binding.recyclerTransferencias.visibility = View.VISIBLE
-                binding.imgEmptyTransaction.visibility = View.GONE
-                binding.txtEmptyTransaction.visibility = View.GONE
-            }
-        }
+//        transactionAdapter = TransactionAdapter(homePageViewModel, viewLifecycleOwner)
+//        binding.recyclerTransferencias.layoutManager = LinearLayoutManager(requireContext())
+//        binding.recyclerTransferencias.adapter = transactionAdapter
+//
+//        transactionAdapter.onTransactionsEmptyListener = { isEmpty ->
+//            if (isEmpty) {
+//                binding.recyclerTransferencias.visibility = View.GONE
+//                binding.imgEmptyTransaction.visibility = View.VISIBLE
+//                binding.txtEmptyTransaction.visibility = View.VISIBLE
+//            } else {
+//                binding.recyclerTransferencias.visibility = View.VISIBLE
+//                binding.imgEmptyTransaction.visibility = View.GONE
+//                binding.txtEmptyTransaction.visibility = View.GONE
+//            }
+//        }
+        testAdapter = TestAdapter(homePageViewModel, viewLifecycleOwner)
+        binding.recyclerTransferencias.adapter = testAdapter
+        binding.recyclerTransferencias.layoutManager = LinearLayoutManager(context)
     }
 
     override fun onDestroy() {

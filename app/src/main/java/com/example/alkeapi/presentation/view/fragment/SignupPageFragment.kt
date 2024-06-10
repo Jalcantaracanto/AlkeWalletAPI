@@ -1,23 +1,15 @@
 package com.example.alkeapi.presentation.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.example.alkeapi.R
-import com.example.alkeapi.data.response.AccountPost
-import com.example.alkeapi.data.response.UserPost
-import com.example.alkeapi.databinding.FragmentRequestMoneyBinding
+import com.example.alkeapi.data.network.response.UserPost
 import com.example.alkeapi.databinding.FragmentSignupPageBinding
-import com.example.alkeapi.presentation.viewmodel.SignupViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.example.alkeapi.presentation.viewmodel.signup.SignupViewModel
 
 
 class SignupPageFragment : Fragment() {

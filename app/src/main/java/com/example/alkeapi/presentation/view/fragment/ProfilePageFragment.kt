@@ -1,7 +1,6 @@
 package com.example.alkeapi.presentation.view.fragment
 
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.alkeapi.R
 import com.example.alkeapi.data.network.api.AlkeApiService
 import com.example.alkeapi.data.network.retrofit.RetrofitHelper
-import com.example.alkeapi.data.repository.AlkeRepositoryImplement
+import com.example.alkeapi.data.network.repository.AlkeRepositoryImplement
 import com.example.alkeapi.databinding.FragmentProfilePageBinding
 import com.example.alkeapi.domain.AlkeUseCase
-import com.example.alkeapi.presentation.viewmodel.HomePageViewModel
-import com.example.alkeapi.presentation.viewmodel.HomePageViewModelFactory
-import com.example.alkeapi.presentation.viewmodel.ProfilePageViewModel
-import com.example.alkeapi.presentation.viewmodel.ProfilePageViewModelFactory
-import com.example.alkeapi.presentation.viewmodel.SendMoneyViewModel
+import com.example.alkeapi.presentation.viewmodel.profile.ProfilePageViewModel
+import com.example.alkeapi.presentation.viewmodel.profile.ProfilePageViewModelFactory
 
 class ProfilePageFragment : Fragment() {
 

@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alkeapi.R
-import com.example.alkeapi.data.response.TransactionDataResponse
-import com.example.alkeapi.data.response.UserDataResponse
+import com.example.alkeapi.data.network.response.TransactionDataResponse
 import com.example.alkeapi.databinding.TransactionItemBinding
-import com.example.alkeapi.presentation.viewmodel.HomePageViewModel
+import com.example.alkeapi.presentation.viewmodel.home.HomePageViewModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
