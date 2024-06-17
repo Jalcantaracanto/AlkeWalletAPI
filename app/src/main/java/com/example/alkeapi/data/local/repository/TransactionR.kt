@@ -5,9 +5,7 @@ import com.example.alkeapi.data.local.model.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class TransactionR(
-    private val transactionDAO: TransactionDAO
-) {
+class TransactionR(private val transactionDAO: TransactionDAO) {
     suspend fun insertTransaction(transaction: Transaction): Long {
         return withContext(Dispatchers.IO) {
             transactionDAO.insertTransaction(transaction)

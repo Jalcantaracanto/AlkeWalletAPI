@@ -123,7 +123,7 @@
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
             android:singleLine="true"
-            android:textColor="@color/lightgrey"
+            android:textColor="@color/black"
             android:textSize="14dp" />
 
 

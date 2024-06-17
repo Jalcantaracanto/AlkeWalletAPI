@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        tools:listitem="@layout/contact_item"/>
+        tools:listitem="@layout/contact_item" />
 
     <TextView
         android:id="@+id/textView9"
@@ -122,10 +122,8 @@
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
             android:singleLine="true"
-            android:textColor="@color/lightgrey"
+            android:textColor="@color/black"
             android:textSize="14dp" />
-
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
