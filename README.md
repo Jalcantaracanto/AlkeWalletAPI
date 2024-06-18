@@ -16,20 +16,20 @@ Quinto trabajo realizado para bootcammp fullstack android. Se realiza para adqui
 
 # Uso
 <p align="justify">
- Al iniciar el app, puedes tanto crear una cuenta o loguear con una cuenta creada.
-- Yara@example.com / 123
+ Al iniciar el app, se recomienda utilizar la siguiente cuenta:
+- rgrimes@example.com / 12345
 </p>
 
 # Estado del Proyecto
 <p align="justify">
-Está tercera etapa esta finalizada, donde se creo el diseño de la Wallet solicitada, por otro lado es posible que en un proximo avance se cambien a fragmentos y la programación sea kotlin, ya que el proyecto debe madurar.
+Está quinta etapa esta finalizada y el proyecto se da por terminado, posiblemente se pueda mejorar más adelante. Pero la aplicacion ya esta funcional, donde puedes ingresar, retirar e ingresar saldos.
 </p>
 
 
 # Tecnologias Utilizadas
  <ul>
     <li>
-    📓 Java
+    📓 Kotlin
     </li>
     <li>
      🟩 XML - Android
